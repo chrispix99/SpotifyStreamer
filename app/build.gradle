@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
+
+jacoco {
+    // can be run with gradlew connectedCheck
+    // reports found in : SpotifyStreamer/app/build/reports/coverage/debug/index.html
+    toolVersion = "0.7.1.201405082137"
+}
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dir 'libs'
+    }
+}
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "com.christopherpick.anroid.spotifystreamer"
+        minSdkVersion 10
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+            testCoverageEnabled = true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile(name: 'spotify-web-api-android-0.1.0', ext:'aar')
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
+    compile 'com.facebook.stetho:stetho:1.1.1'
+    compile 'com.facebook.stetho:stetho-okhttp:1.1.1'
+}
