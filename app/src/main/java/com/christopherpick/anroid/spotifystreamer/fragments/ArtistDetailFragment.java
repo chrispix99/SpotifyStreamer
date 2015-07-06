@@ -1,17 +1,21 @@
 package com.christopherpick.anroid.spotifystreamer.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-
+import android.widget.ListView;
 import com.christopherpick.anroid.spotifystreamer.R;
 import com.christopherpick.anroid.spotifystreamer.activities.ArtistDetailActivity;
 import com.christopherpick.anroid.spotifystreamer.activities.ArtistListActivity;
-import com.christopherpick.anroid.spotifystreamer.dummy.DummyContent;
+import com.christopherpick.anroid.spotifystreamer.adapters.TrackAdapter;
+import com.christopherpick.anroid.spotifystreamer.helpers.SpotifyHelper;
+import kaaes.spotify.webapi.android.models.Tracks;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A fragment representing a single Artist detail screen.
@@ -25,12 +29,10 @@ public class ArtistDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
+    public static final Map<String, Object> ARG_MAP = new HashMap<>();
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
 
+    private TrackAdapter mTrackAdapter;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -42,12 +44,7 @@ public class ArtistDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-        }
+
     }
 
     @Override
@@ -55,11 +52,36 @@ public class ArtistDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_artist_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.artist_detail)).setText(mItem.content);
+        ListView artistList = (ListView) rootView.findViewById(R.id.artist_detail_list);
+        mTrackAdapter = new TrackAdapter(getActivity(), R.layout.track_row);
+        artistList.setAdapter(mTrackAdapter);
+        ARG_MAP.put("country", getActivity().getResources().getConfiguration().locale.getCountry());
+
+        if (getArguments().containsKey(ARG_ITEM_ID)) {
+            new FetchArtistsTask().execute(getArguments().getString(ARG_ITEM_ID));
         }
 
+
         return rootView;
+    }
+
+    private class FetchArtistsTask extends AsyncTask<String, Integer, Tracks> {
+
+        @Override
+        protected Tracks doInBackground(String... params) {
+            int count = params.length;
+            if (count == 1) {
+                android.util.Log.e("CTP", " params: " + params[0]);
+                return SpotifyHelper.getInstance().getSpotifyServiceInstancce().getArtistTopTrack(params[0], ARG_MAP);
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Tracks tracks) {
+            mTrackAdapter.clear();
+            mTrackAdapter.addAll(tracks.tracks);
+        }
     }
 }

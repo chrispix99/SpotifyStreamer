@@ -1,7 +1,6 @@
 import android.app.Application;
-
 import com.christopherpick.anroid.spotifystreamer.BuildConfig;
-import com.christopherpick.anroid.spotifystreamer.Helpers.OkHttpHelper;
+import com.christopherpick.anroid.spotifystreamer.helpers.OkHttpHelper;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 

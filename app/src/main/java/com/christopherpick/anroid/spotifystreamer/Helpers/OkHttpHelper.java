@@ -1,4 +1,4 @@
-package com.christopherpick.anroid.spotifystreamer.Helpers;
+package com.christopherpick.anroid.spotifystreamer.helpers;
 
 
 import com.squareup.okhttp.OkHttpClient;

@@ -3,10 +3,9 @@ package com.christopherpick.anroid.spotifystreamer.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-
+import com.christopherpick.anroid.spotifystreamer.R;
 import com.christopherpick.anroid.spotifystreamer.fragments.ArtistDetailFragment;
 import com.christopherpick.anroid.spotifystreamer.fragments.ArtistListFragment;
-import com.christopherpick.anroid.spotifystreamer.R;
 
 
 // https://www.udacity.com/course/viewer#!/c-nd801/l-4256658707/m-4242848655
@@ -35,7 +34,6 @@ import com.christopherpick.anroid.spotifystreamer.R;
 public class ArtistListActivity extends FragmentActivity
         implements ArtistListFragment.Callbacks {
 
-    // http://www.edumobile.org/android/action-bar-search-view/
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
