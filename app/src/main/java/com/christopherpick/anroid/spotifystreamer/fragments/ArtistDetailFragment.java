@@ -15,6 +15,7 @@ import com.christopherpick.anroid.spotifystreamer.adapters.TrackAdapter;
 import com.christopherpick.anroid.spotifystreamer.utils.ShowToastMessage;
 import com.christopherpick.anroid.spotifystreamer.helpers.SpotifyHelper;
 import kaaes.spotify.webapi.android.models.Tracks;
+import retrofit.RetrofitError;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -158,7 +159,13 @@ public class ArtistDetailFragment extends Fragment {
         protected Tracks doInBackground(String... params) {
             int count = params.length;
             if (count == 1) {
-                return SpotifyHelper.getInstance().getSpotifyServiceInstancce().getArtistTopTrack(params[0], ARG_MAP);
+                Tracks tracks = null;
+                try {
+                    tracks = SpotifyHelper.getInstance().getSpotifyServiceInstancce().getArtistTopTrack(params[0], ARG_MAP);
+                } catch (RetrofitError e){
+                    e.printStackTrace();
+                }
+                return tracks;
             } else {
                 return null;
             }
