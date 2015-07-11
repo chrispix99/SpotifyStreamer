@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.christopherpick.anroid.spotifystreamer.R;
+import com.christopherpick.anroid.spotifystreamer.utils.ImageUtils;
 import com.squareup.picasso.Picasso;
 import kaaes.spotify.webapi.android.models.Track;
 
@@ -39,11 +40,11 @@ public class TrackAdapter extends ArrayAdapter<Track> {
         }
 
         Holder viewHolder = (Holder) convertView.getTag();
-        viewHolder.album.setText(getItem(position).album.name);
-        viewHolder.track.setText(getItem(position).name);
-        if (getItem(position).album.images.size() > 0) {
-            Picasso.with(context).load(getItem(position).album.images.get(0).url).into(viewHolder.imageView);
-        }
+        Track track = getItem(position);
+        viewHolder.album.setText(track.album.name);
+        viewHolder.track.setText(track.name);
+        Picasso.with(context).load(ImageUtils.getBestImageUrl(track.album.images, 200)).into(viewHolder.imageView);
+
         return convertView;
     }
 

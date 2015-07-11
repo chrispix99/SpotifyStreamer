@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import com.christopherpick.anroid.spotifystreamer.R;
 import com.christopherpick.anroid.spotifystreamer.adapters.ArtistAdapter;
+import com.christopherpick.anroid.spotifystreamer.utils.ShowToastMessage;
 import com.christopherpick.anroid.spotifystreamer.helpers.SpotifyHelper;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
 
@@ -192,8 +193,13 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         @Override
         protected void onPostExecute(ArtistsPager artistsPager) {
             mArtistAdapter.clear();
-            mArtistAdapter.addAll(artistsPager.artists.items);
+            if (artistsPager.artists.items.size() > 0) {
+                mArtistAdapter.addAll(artistsPager.artists.items);
+            } else {
+                ShowToastMessage.showToast(getActivity(), R.string.sorry_no_artists);
+            }
         }
     }
-
 }
+
+

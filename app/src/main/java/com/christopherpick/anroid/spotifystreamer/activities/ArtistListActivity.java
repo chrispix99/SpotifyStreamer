@@ -8,13 +8,6 @@ import com.christopherpick.anroid.spotifystreamer.fragments.ArtistDetailFragment
 import com.christopherpick.anroid.spotifystreamer.fragments.ArtistListFragment;
 
 
-// https://www.udacity.com/course/viewer#!/c-nd801/l-4256658707/m-4242848655
-// https://docs.google.com/document/u/1/d/1v4Kv5lSd8-4cs0BW6F24ccA3c1-KDQZG3EV49CUHQys/pub?embedded=true#h.p69hpyxp4b00
-// https://docs.google.com/presentation/d/1Q8LwzD5ODqirWG7K_e4sklE3fEFY_dr4kH4hfoRa0BQ/pub?start=false&loop=false&delayms=15000&slide=id.ga25585343_0_143
-// https://github.com/kaaes/spotify-web-api-android
-// http://www.edumobile.org/android/action-bar-search-view/
-
-
 /**
  * An activity representing a list of Artists. This activity
  * has different presentations for handset and tablet-size devices. On

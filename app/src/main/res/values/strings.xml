@@ -2,4 +2,6 @@
     <string name="app_name">Spotify Streamer</string>
     <string name="title_artist_detail">Artist Detail</string>
     <string name="artists">artists</string>
+    <string name="sorry_no_artists">Sorry No Artists Matched</string>
+    <string name="sorry_no_tracks">Sorry no tracks found for this artist</string>
 </resources>

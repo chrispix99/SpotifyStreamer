@@ -11,6 +11,7 @@ import com.christopherpick.anroid.spotifystreamer.R;
 import com.christopherpick.anroid.spotifystreamer.activities.ArtistDetailActivity;
 import com.christopherpick.anroid.spotifystreamer.activities.ArtistListActivity;
 import com.christopherpick.anroid.spotifystreamer.adapters.TrackAdapter;
+import com.christopherpick.anroid.spotifystreamer.utils.ShowToastMessage;
 import com.christopherpick.anroid.spotifystreamer.helpers.SpotifyHelper;
 import kaaes.spotify.webapi.android.models.Tracks;
 
@@ -81,7 +82,11 @@ public class ArtistDetailFragment extends Fragment {
         @Override
         protected void onPostExecute(Tracks tracks) {
             mTrackAdapter.clear();
-            mTrackAdapter.addAll(tracks.tracks);
+            if (tracks.tracks.size() > 0) {
+                mTrackAdapter.addAll(tracks.tracks);
+            } else {
+                ShowToastMessage.showToast(getActivity(), R.string.sorry_no_tracks);
+            }
         }
     }
 }
