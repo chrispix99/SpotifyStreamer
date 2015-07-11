@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId "com.christopherpick.anroid.spotifystreamer"
-        minSdkVersion 11
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
