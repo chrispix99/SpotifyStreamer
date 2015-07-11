@@ -16,7 +16,9 @@ import com.christopherpick.anroid.spotifystreamer.utils.ShowToastMessage;
 import com.christopherpick.anroid.spotifystreamer.helpers.SpotifyHelper;
 import kaaes.spotify.webapi.android.models.Tracks;
 
+import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,10 +34,12 @@ public class ArtistDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
     public static final String ARG_ARTIST_NAME = "artist_name";
+    public static final String STATE_TRACKS = "state_tracks";
     public static final Map<String, Object> ARG_MAP = new HashMap<>();
 
 
     private TrackAdapter mTrackAdapter;
+    private Tracks tracks;
     private String artistName;
 
     /**
@@ -53,6 +57,36 @@ public class ArtistDetailFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(STATE_TRACKS, (Serializable) tracks.tracks);
+        outState.putString(ARG_ARTIST_NAME, artistName);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Restore the previous dataset
+        if (savedInstanceState != null
+                && savedInstanceState.containsKey(STATE_TRACKS)) {
+            tracks = new Tracks();
+            tracks.tracks = (List)(savedInstanceState.getSerializable(STATE_TRACKS));
+            artistName = savedInstanceState.getString(ARG_ARTIST_NAME);
+            setupAdapterAndTitle();
+        } else {
+            ARG_MAP.put("country", getActivity().getResources().getConfiguration().locale.getCountry());
+
+            if (getArguments().containsKey(ARG_ITEM_ID)) {
+                new FetchArtistsTask().execute(getArguments().getString(ARG_ITEM_ID));
+            }
+            if (getArguments().containsKey(ARG_ARTIST_NAME)) {
+                artistName = getArguments().getString(ARG_ARTIST_NAME);
+            }
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_artist_detail, container, false);
@@ -60,15 +94,6 @@ public class ArtistDetailFragment extends Fragment {
         ListView artistList = (ListView) rootView.findViewById(R.id.artist_detail_list);
         mTrackAdapter = new TrackAdapter(getActivity(), R.layout.track_row);
         artistList.setAdapter(mTrackAdapter);
-        ARG_MAP.put("country", getActivity().getResources().getConfiguration().locale.getCountry());
-
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            new FetchArtistsTask().execute(getArguments().getString(ARG_ITEM_ID));
-        }
-        if (getArguments().containsKey(ARG_ARTIST_NAME)) {
-            artistName = getArguments().getString(ARG_ARTIST_NAME);
-        }
-
 
         return rootView;
     }
@@ -142,15 +167,20 @@ public class ArtistDetailFragment extends Fragment {
         @Override
         protected void onPostExecute(Tracks tracks) {
             mTrackAdapter.clear();
-            if (tracks.tracks.size() > 0) {
-                mTrackAdapter.addAll(tracks.tracks);
-                mCallbacks.setTitle(String.format(getString(R.string.top_tracks), tracks.tracks.size()));
-                mCallbacks.setSubTitle(artistName);
-            } else {
-                ShowToastMessage.showToast(getActivity(), R.string.sorry_no_tracks);
-            }
+            ArtistDetailFragment.this.tracks = tracks;
+            setupAdapterAndTitle();
         }
 
 
+    }
+
+    private void setupAdapterAndTitle() {
+        if (tracks.tracks.size() > 0) {
+            mTrackAdapter.addAll(tracks.tracks);
+            mCallbacks.setTitle(String.format(getString(R.string.top_tracks), tracks.tracks.size()));
+            mCallbacks.setSubTitle(artistName);
+        } else {
+            ShowToastMessage.showToast(getActivity(), R.string.sorry_no_tracks);
+        }
     }
 }
