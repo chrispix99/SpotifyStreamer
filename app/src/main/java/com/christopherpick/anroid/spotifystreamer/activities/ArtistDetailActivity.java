@@ -18,7 +18,7 @@ import com.christopherpick.anroid.spotifystreamer.fragments.ArtistDetailFragment
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link ArtistDetailFragment}.
  */
-public class ArtistDetailActivity extends AppCompatActivity {
+public class ArtistDetailActivity extends AppCompatActivity implements ArtistDetailFragment.Callbacks {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,8 @@ public class ArtistDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putString(ArtistDetailFragment.ARG_ITEM_ID,
                     getIntent().getStringExtra(ArtistDetailFragment.ARG_ITEM_ID));
+            arguments.putString(ArtistDetailFragment.ARG_ARTIST_NAME,
+                    getIntent().getStringExtra(ArtistDetailFragment.ARG_ARTIST_NAME));
             ArtistDetailFragment fragment = new ArtistDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -66,5 +68,15 @@ public class ArtistDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void setTitle(String title) {
+        getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    public void setSubTitle(String subTitle) {
+        getSupportActionBar().setSubtitle(subTitle);
     }
 }

@@ -40,7 +40,7 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(String id, String artistName) {
         }
     };
     /**
@@ -75,7 +75,7 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mCallbacks.onItemSelected(mArtistAdapter.getItem(position).id);
+                mCallbacks.onItemSelected(mArtistAdapter.getItem(position).id, mArtistAdapter.getItem(position).name);
             }
         });
 
@@ -175,7 +175,7 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(String id, String artistName);
     }
 
     private class FetchArtistsTask extends AsyncTask<String, Integer, ArtistsPager> {

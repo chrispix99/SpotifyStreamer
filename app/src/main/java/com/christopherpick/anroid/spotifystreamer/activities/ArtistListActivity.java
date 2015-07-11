@@ -3,9 +3,11 @@ package com.christopherpick.anroid.spotifystreamer.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import com.christopherpick.anroid.spotifystreamer.R;
 import com.christopherpick.anroid.spotifystreamer.fragments.ArtistDetailFragment;
 import com.christopherpick.anroid.spotifystreamer.fragments.ArtistListFragment;
+import kaaes.spotify.webapi.android.models.Artist;
 
 
 /**
@@ -24,8 +26,8 @@ import com.christopherpick.anroid.spotifystreamer.fragments.ArtistListFragment;
  * {@link ArtistListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class ArtistListActivity extends FragmentActivity
-        implements ArtistListFragment.Callbacks {
+public class ArtistListActivity extends AppCompatActivity
+        implements ArtistListFragment.Callbacks, ArtistDetailFragment.Callbacks {
 
 
     /**
@@ -61,13 +63,14 @@ public class ArtistListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(String id, String artistName) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putString(ArtistDetailFragment.ARG_ITEM_ID, id);
+            arguments.putString(ArtistDetailFragment.ARG_ARTIST_NAME, artistName);
             ArtistDetailFragment fragment = new ArtistDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -79,7 +82,18 @@ public class ArtistListActivity extends FragmentActivity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, ArtistDetailActivity.class);
             detailIntent.putExtra(ArtistDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(ArtistDetailFragment.ARG_ARTIST_NAME, artistName);
             startActivity(detailIntent);
         }
+    }
+
+    @Override
+    public void setTitle(String title) {
+        // Do nothing for now
+    }
+
+    @Override
+    public void setSubTitle(String subTitle) {
+        // Do nothing for now
     }
 }

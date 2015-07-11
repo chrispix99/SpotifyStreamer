@@ -4,4 +4,5 @@
     <string name="artists">artists</string>
     <string name="sorry_no_artists">Sorry No Artists Matched</string>
     <string name="sorry_no_tracks">Sorry no tracks found for this artist</string>
+    <string name="top_tracks">Top %1$d Tracks</string>
 </resources>
