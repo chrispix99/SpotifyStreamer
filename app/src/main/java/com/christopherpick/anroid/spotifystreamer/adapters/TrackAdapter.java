@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,7 +44,10 @@ public class TrackAdapter extends ArrayAdapter<Track> {
         Track track = getItem(position);
         viewHolder.album.setText(track.album.name);
         viewHolder.track.setText(track.name);
-        Picasso.with(context).load(ImageUtils.getBestImageUrl(track.album.images, 200)).into(viewHolder.imageView);
+        String bestImageUrl = ImageUtils.getBestImageUrl(track.album.images, 200);
+        if (bestImageUrl != null && URLUtil.isValidUrl(bestImageUrl)) {
+            Picasso.with(context).load(bestImageUrl).into(viewHolder.imageView);
+        }
 
         return convertView;
     }
