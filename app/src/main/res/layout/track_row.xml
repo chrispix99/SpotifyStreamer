@@ -5,6 +5,8 @@
               android:gravity="center_vertical"
               android:layout_height="wrap_content">
 
+    <!-- not sure what the dimensions were suppose to be, my documentation for this project was
+    removed and replaced by some movie project -->
     <ImageView
         android:layout_margin="18dp"
         android:layout_width="100dp"
