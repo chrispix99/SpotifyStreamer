@@ -1,3 +1,4 @@
+package com.christopherpick.anroid.spotifystreamer;
 import android.app.Application;
 import com.christopherpick.anroid.spotifystreamer.BuildConfig;
 import com.christopherpick.anroid.spotifystreamer.helpers.OkHttpHelper;

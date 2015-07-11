@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import kaaes.spotify.webapi.android.models.Track;
 
 /**
- * Created by chrispix on 7/5/15.
+ * Adapter that shows a list of tracks for a particular Artist.
  */
 public class TrackAdapter extends ArrayAdapter<Track> {
 

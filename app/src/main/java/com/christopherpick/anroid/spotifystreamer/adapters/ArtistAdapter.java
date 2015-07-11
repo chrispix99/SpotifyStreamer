@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import kaaes.spotify.webapi.android.models.Artist;
 
 /**
- * Created by chrispix on 7/5/15.
+ * Adapter that shows the artist list from a search result.
  */
 public class ArtistAdapter extends ArrayAdapter<Artist> {
 

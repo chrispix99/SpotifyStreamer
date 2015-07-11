@@ -71,7 +71,6 @@ public class ArtistDetailFragment extends Fragment {
         protected Tracks doInBackground(String... params) {
             int count = params.length;
             if (count == 1) {
-                android.util.Log.e("CTP", " params: " + params[0]);
                 return SpotifyHelper.getInstance().getSpotifyServiceInstancce().getArtistTopTrack(params[0], ARG_MAP);
             } else {
                 return null;
