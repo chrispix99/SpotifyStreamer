@@ -5,4 +5,6 @@
     <string name="sorry_no_artists">Sorry No Artists Matched</string>
     <string name="sorry_no_tracks">Sorry no tracks found for this artist</string>
     <string name="top_tracks">Top %1$d Tracks</string>
+    <string name="error_playing_track">Error occurred while playing track, please try again.</string>
+    <string name="media_service_stopped">Media Service has stopped</string>
 </resources>
