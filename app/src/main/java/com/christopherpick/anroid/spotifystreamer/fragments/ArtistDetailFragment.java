@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,8 @@ public class ArtistDetailFragment extends Fragment {
     private String artistName;
     private ListView artistList;
     private Tracks tracks;
+    private boolean mIsLargeLayout;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -56,8 +59,6 @@ public class ArtistDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -105,25 +106,36 @@ public class ArtistDetailFragment extends Fragment {
         artistList = (ListView) rootView.findViewById(R.id.artist_detail_list);
         mTrackAdapter = new TrackAdapter(getActivity(), R.layout.track_row);
         artistList.setAdapter(mTrackAdapter);
+        mIsLargeLayout = getResources().getBoolean(R.bool.large_layout);
 
         return rootView;
     }
 
     void showDialog(int position) {
-
-        // DialogFragment.show() will take care of adding the fragment
-        // in a transaction.  We also want to remove any currently showing
-        // dialog, so make our own transaction and take care of that here.
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         DialogFragment newFragment = PlayFragment.newInstance(position, tracks);
-        newFragment.show(ft, "dialog");
+
+        if (mIsLargeLayout) {
+            newFragment.show(fragmentManager, "dialog");
+        } else {
+            // DialogFragment.show() will take care of adding the fragment
+            // in a transaction.  We also want to remove any currently showing
+            // dialog, so make our own transaction and take care of that here.
+//            FragmentTransaction ft = getFragmentManager().beginTransaction();
+//            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+//            if (prev != null) {
+//                ft.remove(prev);
+//            }
+//            ft.addToBackStack(null);
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            // For a little polish, specify a transition animation
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            // To make it fullscreen, use the 'content' root view as the container
+            // for the fragment, which is always the root view for the activity
+            transaction.add(android.R.id.content, newFragment)
+                    .addToBackStack(null).commit();
+
+        }
     }
 
     @Override
