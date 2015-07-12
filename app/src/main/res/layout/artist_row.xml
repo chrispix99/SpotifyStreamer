@@ -3,7 +3,9 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:gravity="center_vertical"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:background="?android:attr/activatedBackgroundIndicator"
+              >
 
     <ImageView
         android:layout_margin="18dp"

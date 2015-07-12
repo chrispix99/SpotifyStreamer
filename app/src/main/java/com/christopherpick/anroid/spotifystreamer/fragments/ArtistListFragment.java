@@ -75,12 +75,14 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mListView.setItemChecked(position, true);
                 mCallbacks.onItemSelected(mArtistAdapter.getItem(position).id, mArtistAdapter.getItem(position).name);
             }
         });
 
         mArtistAdapter = new ArtistAdapter(getActivity(), R.layout.artist_row);
         mListView.setAdapter(mArtistAdapter);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         ((EditText) contentView.findViewById(R.id.search_string)).addTextChangedListener(this);
         return contentView;

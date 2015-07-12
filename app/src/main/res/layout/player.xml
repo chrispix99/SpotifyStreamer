@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/artist_name"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/album_name"
+        android:layout_below="@+id/artist_name"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:id="@+id/album_art"
+        android:layout_below="@+id/album_name"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/track_name"
+        android:layout_below="@+id/album_art"
+        android:layout_centerHorizontal="true"/>
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seek_bar"
+        android:layout_below="@+id/track_name"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/current_time"
+        android:layout_below="@+id/seek_bar"
+        android:layout_alignLeft="@+id/seek_bar"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/track_length"
+        android:layout_below="@+id/seek_bar"
+        android:layout_alignRight="@+id/seek_bar"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/back_button"
+        android:layout_below="@+id/current_time"
+        android:layout_alignLeft="@+id/current_time"
+        android:background="@android:drawable/ic_media_previous"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/play_pause_button"
+        android:layout_below="@+id/current_time"
+        android:layout_centerHorizontal="true"
+        android:background="@android:drawable/ic_media_play"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/forward_button"
+        android:layout_below="@+id/current_time"
+        android:layout_alignRight="@+id/track_length"
+        android:background="@android:drawable/ic_media_next"
+        />
+
+
+</RelativeLayout>

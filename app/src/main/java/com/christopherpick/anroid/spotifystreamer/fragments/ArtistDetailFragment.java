@@ -3,10 +3,13 @@ package com.christopherpick.anroid.spotifystreamer.fragments;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import com.christopherpick.anroid.spotifystreamer.R;
 import com.christopherpick.anroid.spotifystreamer.activities.ArtistDetailActivity;
@@ -40,9 +43,9 @@ public class ArtistDetailFragment extends Fragment {
 
 
     private TrackAdapter mTrackAdapter;
-    private Tracks tracks;
     private String artistName;
-
+    private ListView artistList;
+    private Tracks tracks;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -85,6 +88,13 @@ public class ArtistDetailFragment extends Fragment {
                 artistName = getArguments().getString(ARG_ARTIST_NAME);
             }
         }
+
+        artistList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                showDialog(position);
+            }
+        });
     }
 
     @Override
@@ -92,11 +102,28 @@ public class ArtistDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_artist_detail, container, false);
 
-        ListView artistList = (ListView) rootView.findViewById(R.id.artist_detail_list);
+        artistList = (ListView) rootView.findViewById(R.id.artist_detail_list);
         mTrackAdapter = new TrackAdapter(getActivity(), R.layout.track_row);
         artistList.setAdapter(mTrackAdapter);
 
         return rootView;
+    }
+
+    void showDialog(int position) {
+
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = PlayFragment.newInstance(position, tracks);
+        newFragment.show(ft, "dialog");
     }
 
     @Override
