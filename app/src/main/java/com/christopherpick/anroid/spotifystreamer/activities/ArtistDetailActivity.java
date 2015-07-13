@@ -64,7 +64,8 @@ public class ArtistDetailActivity extends AppCompatActivity implements ArtistDet
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, ArtistListActivity.class));
+            onBackPressed();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
