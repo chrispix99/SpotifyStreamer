@@ -1,6 +1,9 @@
 package com.christopherpick.anroid.spotifystreamer;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import com.christopherpick.anroid.spotifystreamer.helpers.OkHttpHelper;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
@@ -33,5 +36,12 @@ public class SpotifyApplication extends Application {
                         .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                         .build());
         OkHttpHelper.getInstance().getOkHttpClient().networkInterceptors().add(new StethoInterceptor());
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

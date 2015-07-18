@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.christopherpick.anroid.spotifystreamer.R;
+import com.christopherpick.anroid.spotifystreamer.SpotifyApplication;
 import com.christopherpick.anroid.spotifystreamer.adapters.ArtistAdapter;
 import com.christopherpick.anroid.spotifystreamer.utils.ShowToastMessage;
 import com.christopherpick.anroid.spotifystreamer.helpers.SpotifyHelper;
@@ -70,7 +72,7 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_artist_list, container, false);
-        mListView = (ListView) contentView.findViewById(R.id.artist_list);
+        mListView = (ListView) contentView.findViewById(R.id.artist_list_view);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -186,10 +188,15 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         protected ArtistsPager doInBackground(String... params) {
             int count = params.length;
             if (count == 1) {
-                return SpotifyHelper.getInstance().getSpotifyServiceInstancce().searchArtists(params[0]);
-            } else {
-                return null;
+                if (((SpotifyApplication)getActivity().getApplication()).isOnline()) {
+                    return SpotifyHelper.getInstance().getSpotifyServiceInstancce().searchArtists(params[0]);
+                } else {
+                    if (getActivity() != null) {
+                        ShowToastMessage.showToast(getActivity(), R.string.offline_warning, Toast.LENGTH_LONG );
+                    }
+                }
             }
+            return null;
         }
 
         @Override
