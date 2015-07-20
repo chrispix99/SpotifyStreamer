@@ -1,6 +1,8 @@
 package com.christopherpick.anroid.spotifystreamer.utils;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 import com.christopherpick.anroid.spotifystreamer.R;
 
@@ -48,11 +50,19 @@ public class ShowToastMessage {
      * @param length            toast length (time to display)
      * @param cancelPrevious    cancel the previous toast
      */
-    public static void showToast(Context context, int resourceId, int length, boolean cancelPrevious) {
+    public static void showToast(final Context context, final int resourceId, final int length, boolean cancelPrevious) {
         if (noArtistToast != null && cancelPrevious) {
             noArtistToast.cancel();
         }
-        noArtistToast = Toast.makeText(context, resourceId, length);
-        noArtistToast.show();
+
+        // Make sure that we are on the main UI thread. 
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                noArtistToast = Toast.makeText(context, resourceId, length);
+                noArtistToast.show();
+            }
+        });
+
     }
 }

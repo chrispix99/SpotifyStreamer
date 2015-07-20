@@ -161,6 +161,7 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
 
     }
 
+    // I know I could have used a SearchView, but I chose to use a regular edit text.
     @Override
     public void afterTextChanged(Editable s) {
         if (s != null && s.toString().length() > 0) {
@@ -188,11 +189,11 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         protected ArtistsPager doInBackground(String... params) {
             int count = params.length;
             if (count == 1) {
-                if (((SpotifyApplication)getActivity().getApplication()).isOnline()) {
-                    return SpotifyHelper.getInstance().getSpotifyServiceInstancce().searchArtists(params[0]);
-                } else {
-                    if (getActivity() != null) {
-                        ShowToastMessage.showToast(getActivity(), R.string.offline_warning, Toast.LENGTH_LONG );
+                if (getActivity() != null) {
+                    if (((SpotifyApplication) getActivity().getApplication()).isOnline()) {
+                        return SpotifyHelper.getInstance().getSpotifyServiceInstancce().searchArtists(params[0]);
+                    } else {
+                        ShowToastMessage.showToast(getActivity(), R.string.offline_warning, Toast.LENGTH_LONG);
                     }
                 }
             }
