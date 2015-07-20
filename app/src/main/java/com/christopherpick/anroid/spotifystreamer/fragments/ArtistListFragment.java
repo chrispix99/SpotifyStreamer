@@ -203,12 +203,17 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         @Override
         protected void onPostExecute(ArtistsPager artistsPager) {
             mArtistAdapter.clear();
-            if (artistsPager.artists.items.size() > 0) {
-                mArtistAdapter.addAll(artistsPager.artists.items);
-            } else {
-                ShowToastMessage.showToast(getActivity(), R.string.sorry_no_artists);
+            if (artistsPager != null && artistsPager.artists != null && artistsPager.artists.items != null) {
+                if (artistsPager.artists.items.size() > 0) {
+                    mArtistAdapter.addAll(artistsPager.artists.items);
+                } else {
+                    ShowToastMessage.showToast(getActivity(), R.string.sorry_no_artists);
+                }
+            }  else {
+                ShowToastMessage.showToast(getActivity(), R.string.offline_warning);
             }
         }
+
     }
 }
 

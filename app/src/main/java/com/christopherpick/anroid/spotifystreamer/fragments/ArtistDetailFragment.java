@@ -221,12 +221,16 @@ public class ArtistDetailFragment extends Fragment {
     }
 
     private void setupAdapterAndTitle() {
-        if (tracks.tracks.size() > 0) {
-            mTrackAdapter.addAll(tracks.tracks);
-            mCallbacks.setTitle(String.format(getString(R.string.top_tracks), tracks.tracks.size()));
-            mCallbacks.setSubTitle(artistName);
+        if (tracks != null && tracks.tracks != null){
+            if (tracks.tracks.size() > 0) {
+                mTrackAdapter.addAll(tracks.tracks);
+                mCallbacks.setTitle(String.format(getString(R.string.top_tracks), tracks.tracks.size()));
+                mCallbacks.setSubTitle(artistName);
+            } else {
+                ShowToastMessage.showToast(getActivity(), R.string.sorry_no_tracks);
+            }
         } else {
-            ShowToastMessage.showToast(getActivity(), R.string.sorry_no_tracks);
+            ShowToastMessage.showToast(getActivity(), R.string.offline_warning);
         }
     }
 }

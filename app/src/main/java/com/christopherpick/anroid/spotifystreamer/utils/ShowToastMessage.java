@@ -55,7 +55,7 @@ public class ShowToastMessage {
             noArtistToast.cancel();
         }
 
-        // Make sure that we are on the main UI thread. 
+        // Make sure that we are on the main UI thread.
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
