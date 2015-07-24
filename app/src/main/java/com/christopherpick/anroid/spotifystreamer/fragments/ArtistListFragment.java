@@ -197,7 +197,6 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
     public void afterTextChanged(Editable s) {
         if (s != null && s.toString().length() > 0) {
             if (!s.toString().equals(currentString)) {
-                android.util.Log.e("Retro", "Fetching artists");
                 new FetchArtistsTask().execute(s.toString());
                 currentString = s.toString();
             }
