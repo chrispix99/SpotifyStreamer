@@ -29,7 +29,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
     private Tracks tracks;
     private int currentTrack;
     private MediaPlayer mediaPlayer;
-    private boolean paused = false;
+    private boolean paused = true;
     private Handler seekHandler = new Handler();
 
 
@@ -58,6 +58,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         if (mediaPlayer != null) {
             paused = true;
             mediaPlayer.pause();
+            updateNowPaused();
         }
     }
 
@@ -70,6 +71,7 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         if (mediaPlayer != null) {
             paused = false;
             mediaPlayer.start();
+            updateNowPlaying();
             updateSeekBars();
             configureMaxSeek();
             return true;
@@ -123,6 +125,22 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         for (int i = 0; i < callbackList.size(); i++) {
             if (mediaPlayer != null) {
                 callbackList.get(i).getSeekBar().setMax(mediaPlayer.getDuration());
+            }
+        }
+    }
+
+    private void updateNowPlaying() {
+        for (int i = 0; i < callbackList.size(); i++) {
+            if (mediaPlayer != null) {
+                callbackList.get(i).nowPlaying();
+            }
+        }
+    }
+
+    private void updateNowPaused() {
+        for (int i = 0; i < callbackList.size(); i++) {
+            if (mediaPlayer != null) {
+                callbackList.get(i).nowPaused();
             }
         }
     }
@@ -342,6 +360,8 @@ public class MediaService extends Service implements MediaPlayer.OnPreparedListe
         public void mediaChanged();
         public SeekBar getSeekBar();
         public void currentTime(String time);
+        public void nowPlaying();
+        public void nowPaused();
     }
 
     /**

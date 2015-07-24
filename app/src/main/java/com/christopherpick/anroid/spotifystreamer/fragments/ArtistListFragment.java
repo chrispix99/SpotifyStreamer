@@ -3,6 +3,7 @@ package com.christopherpick.anroid.spotifystreamer.fragments;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,7 +19,11 @@ import com.christopherpick.anroid.spotifystreamer.SpotifyApplication;
 import com.christopherpick.anroid.spotifystreamer.adapters.ArtistAdapter;
 import com.christopherpick.anroid.spotifystreamer.utils.ShowToastMessage;
 import com.christopherpick.anroid.spotifystreamer.helpers.SpotifyHelper;
+import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * A list fragment representing a list of Artists. This fragment
@@ -36,6 +41,9 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
      * activated item position. Only used on tablets.
      */
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
+    public static final String STATE_ARTISTS = "state_artists";
+    private EditText searchText;
+
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
      * nothing. Used only when this fragment is not attached to an activity.
@@ -56,6 +64,7 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
     private int mActivatedPosition = ListView.INVALID_POSITION;
     private ListView mListView;
     private ArtistAdapter mArtistAdapter;
+    private ArtistsPager artistsPager;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -86,8 +95,25 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         mListView.setAdapter(mArtistAdapter);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        ((EditText) contentView.findViewById(R.id.search_string)).addTextChangedListener(this);
+        searchText = ((EditText) contentView.findViewById(R.id.search_string));
         return contentView;
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(STATE_ARTISTS)) {
+                ArtistsPager pager = new ArtistsPager();
+                pager.artists.items = (List)(savedInstanceState.getSerializable(STATE_ARTISTS));
+            }
+            if (savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+                setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+            }
+            setupArtistList();
+        }
+        searchText.addTextChangedListener(this);
+
     }
 
     @Override
@@ -95,10 +121,7 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         super.onViewCreated(view, savedInstanceState);
 
         // Restore the previously serialized activated item position.
-        if (savedInstanceState != null
-                && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
-        }
+
     }
 
     @Override
@@ -123,9 +146,11 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        searchText.removeTextChangedListener(this);
         if (mActivatedPosition != ListView.INVALID_POSITION) {
             // Serialize and persist the activated item position.
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+            outState.putSerializable(STATE_ARTISTS, (Serializable) artistsPager.artists.items);
         }
     }
 
@@ -165,6 +190,7 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         if (s != null && s.toString().length() > 0) {
+            android.util.Log.e("Retro","Fetching artists");
             new FetchArtistsTask().execute(s.toString());
         } else {
             mArtistAdapter.clear();
@@ -203,17 +229,22 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         @Override
         protected void onPostExecute(ArtistsPager artistsPager) {
             mArtistAdapter.clear();
-            if (artistsPager != null && artistsPager.artists != null && artistsPager.artists.items != null) {
-                if (artistsPager.artists.items.size() > 0) {
-                    mArtistAdapter.addAll(artistsPager.artists.items);
-                } else {
-                    ShowToastMessage.showToast(getActivity(), R.string.sorry_no_artists);
-                }
-            }  else {
-                ShowToastMessage.showToast(getActivity(), R.string.offline_warning);
-            }
+            ArtistListFragment.this.artistsPager = artistsPager;
+            setupArtistList();
         }
 
+    }
+
+    private void setupArtistList() {
+        if (artistsPager != null && artistsPager.artists != null && artistsPager.artists.items != null) {
+            if (artistsPager.artists.items.size() > 0) {
+                mArtistAdapter.addAll(artistsPager.artists.items);
+            } else {
+                ShowToastMessage.showToast(getActivity(), R.string.sorry_no_artists);
+            }
+        }  else {
+            ShowToastMessage.showToast(getActivity(), R.string.offline_warning);
+        }
     }
 }
 

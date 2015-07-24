@@ -160,12 +160,12 @@ public class PlayFragment extends DialogFragment implements View.OnClickListener
 
     private void playPauseClick() {
         if (mService != null) {
-            if (mService.isPaused()) {
+            if (mService.isPaused() || !mService.isPlaying()) {
+                playPauseButton.setEnabled(false);
                 mService.resumeTrack();
-                playPauseButton.setBackgroundResource(android.R.drawable.ic_media_play);
             } else {
+                playPauseButton.setEnabled(false);
                 mService.pauseTrack();
-                playPauseButton.setBackgroundResource(android.R.drawable.ic_media_pause);
             }
         }
     }
@@ -176,7 +176,6 @@ public class PlayFragment extends DialogFragment implements View.OnClickListener
      */
     private void setViewFromTrack() {
         clearTrackData();
-        android.util.Log.e("CTP","Track Data Service was null");
         if (mService != null) {
             artistName.setText(mService.getArtistName());
             albumName.setText(mService.getAlbumName());
@@ -250,6 +249,23 @@ public class PlayFragment extends DialogFragment implements View.OnClickListener
     @Override
     public void currentTime(String time) {
         currentTime.setText(time);
+    }
+
+    @Override
+    public void nowPlaying() {
+        if (playPauseButton != null) {
+            playPauseButton.setEnabled(true);
+            playPauseButton.setBackgroundResource(android.R.drawable.ic_media_pause);
+        }
+    }
+
+    @Override
+    public void nowPaused() {
+        if (playPauseButton != null) {
+            playPauseButton.setEnabled(true);
+            playPauseButton.setBackgroundResource(android.R.drawable.ic_media_play);
+        }
+
     }
 
     @Override

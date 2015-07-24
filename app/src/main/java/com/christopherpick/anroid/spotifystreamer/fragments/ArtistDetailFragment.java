@@ -77,6 +77,7 @@ public class ArtistDetailFragment extends Fragment {
                 && savedInstanceState.containsKey(STATE_TRACKS)) {
             tracks = new Tracks();
             tracks.tracks = (List)(savedInstanceState.getSerializable(STATE_TRACKS));
+
             artistName = savedInstanceState.getString(ARG_ARTIST_NAME);
             setupAdapterAndTitle();
         } else {
