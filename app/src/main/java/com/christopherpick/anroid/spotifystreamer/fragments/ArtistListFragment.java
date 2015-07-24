@@ -41,8 +41,10 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
      * activated item position. Only used on tablets.
      */
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
-    public static final String STATE_ARTISTS = "state_artists";
+    private static final String STATE_ARTISTS = "state_artists";
+    private static final String STATE_SEARCH = "search_string";
     private EditText searchText;
+    private String currentString;
 
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
@@ -95,25 +97,24 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         mListView.setAdapter(mArtistAdapter);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        searchText = ((EditText) contentView.findViewById(R.id.search_string));
-        return contentView;
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(STATE_ARTISTS)) {
-                ArtistsPager pager = new ArtistsPager();
-                pager.artists.items = (List)(savedInstanceState.getSerializable(STATE_ARTISTS));
+                artistsPager = (ArtistsPager)(savedInstanceState.getSerializable(STATE_ARTISTS));
             }
             if (savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
                 setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
             }
-            setupArtistList();
+            if (savedInstanceState.containsKey(STATE_SEARCH)) {
+                currentString = savedInstanceState.getString(STATE_SEARCH);
+            }
+            if (artistsPager != null) {
+                setupArtistList();
+            }
         }
-        searchText.addTextChangedListener(this);
 
+        searchText = ((EditText) contentView.findViewById(R.id.search_string));
+        searchText.addTextChangedListener(this);
+        return contentView;
     }
 
     @Override
@@ -150,7 +151,12 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
         if (mActivatedPosition != ListView.INVALID_POSITION) {
             // Serialize and persist the activated item position.
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
-            outState.putSerializable(STATE_ARTISTS, (Serializable) artistsPager.artists.items);
+        }
+        if (artistsPager != null) {
+            outState.putSerializable(STATE_ARTISTS, artistsPager);
+        }
+        if (currentString != null) {
+            outState.putString(STATE_SEARCH, currentString);
         }
     }
 
@@ -190,8 +196,11 @@ public class ArtistListFragment extends Fragment implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         if (s != null && s.toString().length() > 0) {
-            android.util.Log.e("Retro","Fetching artists");
-            new FetchArtistsTask().execute(s.toString());
+            if (!s.toString().equals(currentString)) {
+                android.util.Log.e("Retro", "Fetching artists");
+                new FetchArtistsTask().execute(s.toString());
+                currentString = s.toString();
+            }
         } else {
             mArtistAdapter.clear();
         }

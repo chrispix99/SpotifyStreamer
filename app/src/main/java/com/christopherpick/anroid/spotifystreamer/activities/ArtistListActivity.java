@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 import com.christopherpick.anroid.spotifystreamer.R;
 import com.christopherpick.anroid.spotifystreamer.fragments.ArtistDetailFragment;
 import com.christopherpick.anroid.spotifystreamer.fragments.ArtistListFragment;
@@ -54,7 +55,7 @@ public class ArtistListActivity extends AppCompatActivity
                     .findFragmentById(R.id.artist_list))
                     .setActivateOnItemClick(true);
         }
-
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         // TODO: If exposing deep links into your app, handle intents here.
     }
 
