@@ -10,7 +10,9 @@ import com.christopherpick.anroid.spotifystreamer.R;
  * Shows a toast message, cancels the previous one.
  */
 public class ShowToastMessage {
+
     private static Toast noArtistToast;
+    private static final String TAG = ShowToastMessage.class.getSimpleName();
 
     /**
      * Show a Toast message that by default cancels any previous toasts.
@@ -59,8 +61,12 @@ public class ShowToastMessage {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                noArtistToast = Toast.makeText(context, resourceId, length);
-                noArtistToast.show();
+                if (context != null) {
+                    noArtistToast = Toast.makeText(context, resourceId, length);
+                    noArtistToast.show();
+                } else {
+                    android.util.Log.e(TAG, "Activity was removed");
+                }
             }
         });
 
